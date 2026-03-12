@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.13.36105.23
+# Visual Studio Version 18
+VisualStudioVersion = 18.4.11605.240 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enrich.Domain", "Enrich.Domain\Enrich.Domain.csproj", "{2AD9CC61-C4A3-4E6E-B642-61CA16C12B9B}"
 EndProject
@@ -10,6 +10,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enrich.Infrastructure", "Enrich.Infrastructure\Enrich.Infrastructure.csproj", "{E76EEC95-9298-4AA7-B3C5-FFD77FB3BB60}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enrich.Web", "Enrich.Web\Enrich.Web.csproj", "{8BD1A8EE-E22D-420E-97FA-88AE1A08DBAC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{22C05BAE-578A-47C7-A829-664A0DF5874B}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
