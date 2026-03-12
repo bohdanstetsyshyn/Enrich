@@ -1,0 +1,12 @@
+root = true
+
+[*.cs]
+dotnet_analyzer_diagnostic.category-Style.severity = warning
+csharp_new_line_before_open_brace = all
+
+dotnet_diagnostic.SA1600.severity = none
+dotnet_diagnostic.SA1633.severity = none
+dotnet_diagnostic.SA1101.severity = none
+dotnet_diagnostic.SA1200.severity = none
+
+dotnet_diagnostic.RCS1018.severity = suggestion  
