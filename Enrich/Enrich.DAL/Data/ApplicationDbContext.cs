@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using Enrich.Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Enrich.Infrastructure.Models;
+namespace Enrich.DAL.Data;
 
-public partial class AppDbContext : DbContext
+public partial class ApplicationDbContext : DbContext
 {
-    public AppDbContext()
+    public ApplicationDbContext()
     {
     }
 
-    public AppDbContext(DbContextOptions<AppDbContext> options)
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {
     }
