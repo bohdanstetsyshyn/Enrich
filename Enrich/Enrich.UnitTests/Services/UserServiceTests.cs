@@ -1,3 +1,4 @@
+using Enrich.BLL.Common;
 using Enrich.BLL.DTOs;
 using Enrich.BLL.Services;
 using Enrich.DAL.Entities;
@@ -45,7 +46,7 @@ namespace Enrich.UnitTests.Services
 
             var result = await userService.UpdateProfileAsync(userId, profileDto);
 
-            Assert.That(result.Succeeded, Is.True);
+            Assert.That(result.IsSuccess, Is.True);
             Assert.That(existingUser.UserName, Is.EqualTo("newName"));
             Assert.That(existingUser.Bio, Is.EqualTo("newBio"));
             userManagerMock.Verify(m => m.UpdateAsync(existingUser), Times.Once);
@@ -61,8 +62,8 @@ namespace Enrich.UnitTests.Services
 
             var result = await userService.UpdateProfileAsync(userId, profileDto);
 
-            Assert.That(result.Succeeded, Is.False);
-            Assert.That(result.Errors.First().Description, Is.EqualTo("Користувача не знайдено."));
+            Assert.That(result.IsSuccess, Is.False);
+            Assert.That(result.ErrorMessage, Is.EqualTo("Користувача не знайдено."));
             userManagerMock.Verify(m => m.UpdateAsync(It.IsAny<User>()), Times.Never);
         }
 
@@ -80,8 +81,8 @@ namespace Enrich.UnitTests.Services
 
             var result = await userService.UpdateProfileAsync(userId, profileDto);
 
-            Assert.That(result.Succeeded, Is.False);
-            Assert.That(result.Errors.Any(e => e.Description.Contains("taken")), Is.True);
+            Assert.That(result.IsSuccess, Is.False);
+            Assert.That(result.ErrorMessage, Does.Contain("taken"));
             userManagerMock.Verify(m => m.UpdateAsync(It.IsAny<User>()), Times.Never);
         }
 
@@ -99,8 +100,8 @@ namespace Enrich.UnitTests.Services
 
             var result = await userService.UpdateProfileAsync(userId, profileDto);
 
-            Assert.That(result.Succeeded, Is.False);
-            Assert.That(result.Errors.First().Description, Is.EqualTo("Database error."));
+            Assert.That(result.IsSuccess, Is.False);
+            Assert.That(result.ErrorMessage, Is.EqualTo("Database error."));
         }
 
         [Test]
@@ -117,7 +118,7 @@ namespace Enrich.UnitTests.Services
 
             var result = await userService.RestrictUserAsync(dto);
 
-            Assert.That(result.Succeeded, Is.True);
+            Assert.That(result.IsSuccess, Is.True);
             userManagerMock.Verify(m => m.SetLockoutEndDateAsync(existingUser, It.IsAny<DateTimeOffset>()), Times.Once);
         }
 
@@ -131,8 +132,8 @@ namespace Enrich.UnitTests.Services
 
             var result = await userService.RestrictUserAsync(dto);
 
-            Assert.That(result.Succeeded, Is.False);
-            Assert.That(result.Errors.First().Description, Is.EqualTo("Користувача не знайдено."));
+            Assert.That(result.IsSuccess, Is.False);
+            Assert.That(result.ErrorMessage, Is.EqualTo("Користувача не знайдено."));
             userManagerMock.Verify(m => m.SetLockoutEndDateAsync(It.IsAny<User>(), It.IsAny<DateTimeOffset>()), Times.Never);
         }
 
@@ -150,7 +151,7 @@ namespace Enrich.UnitTests.Services
 
             var result = await userService.RestoreUserAsync(dto);
 
-            Assert.That(result.Succeeded, Is.True);
+            Assert.That(result.IsSuccess, Is.True);
             userManagerMock.Verify(m => m.SetLockoutEndDateAsync(existingUser, null), Times.Once);
         }
 
@@ -164,8 +165,8 @@ namespace Enrich.UnitTests.Services
 
             var result = await userService.RestoreUserAsync(dto);
 
-            Assert.That(result.Succeeded, Is.False);
-            Assert.That(result.Errors.First().Description, Is.EqualTo("Користувача не знайдено."));
+            Assert.That(result.IsSuccess, Is.False);
+            Assert.That(result.ErrorMessage, Is.EqualTo("Користувача не знайдено."));
         }
     }
 }

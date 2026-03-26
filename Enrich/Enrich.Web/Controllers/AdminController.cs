@@ -57,17 +57,14 @@ namespace Enrich.Web.Controllers
 
             var result = await userService.RestrictUserAsync(dto);
 
-            if (result.Succeeded)
+            if (result.IsSuccess)
             {
                 logger.LogInformation("Адміністратор заблокував акаунт {UserId}", model.UserId);
                 TempData["SuccessMessage"] = $"Акаунт користувача {model.Username} успішно заблоковано.";
                 return RedirectToAction("Browse");
             }
 
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
+            ModelState.AddModelError(string.Empty, result.ErrorMessage!);
 
             return View(model);
         }
@@ -99,17 +96,14 @@ namespace Enrich.Web.Controllers
 
             var result = await userService.RestoreUserAsync(dto);
 
-            if (result.Succeeded)
+            if (result.IsSuccess)
             {
                 logger.LogInformation("Адміністратор розблокував акаунт {UserId}", model.UserId);
                 TempData["SuccessMessage"] = $"Акаунт користувача {model.Username} успішно розблоковано.";
                 return RedirectToAction("Browse");
             }
 
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
+            ModelState.AddModelError(string.Empty, result.ErrorMessage!);
 
             return View(model);
         }

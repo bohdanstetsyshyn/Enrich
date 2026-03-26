@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Enrich.BLL.Common;
 using Enrich.BLL.DTOs;
 using Enrich.BLL.Interfaces;
 using Enrich.Web.Controllers;
@@ -149,7 +150,7 @@ namespace Enrich.UnitTests.Controllers
             var model = new CreateWordViewModel { Term = "Serendipity" };
             _wordServiceMock
                 .Setup(w => w.CreatePersonalWordAsync(FakeUserId, It.IsAny<CreatePersonalWordDTO>()))
-                .ReturnsAsync((true, null));
+                .ReturnsAsync(Result.Success());
 
             // Act
             var result = await _controller.Create(model);
@@ -169,7 +170,7 @@ namespace Enrich.UnitTests.Controllers
             var model = new CreateWordViewModel { Term = "Serendipity" };
             _wordServiceMock
                 .Setup(w => w.CreatePersonalWordAsync(FakeUserId, It.IsAny<CreatePersonalWordDTO>()))
-                .ReturnsAsync((false, "You already have a word 'Serendipity' in your personal dictionary."));
+                .ReturnsAsync(Result.Failure("You already have a word 'Serendipity' in your personal dictionary."));
 
             // Act
             var result = await _controller.Create(model);
@@ -201,7 +202,7 @@ namespace Enrich.UnitTests.Controllers
 
             _wordServiceMock
                 .Setup(w => w.CreatePersonalWordAsync(FakeUserId, It.IsAny<CreatePersonalWordDTO>()))
-                .ReturnsAsync((true, null));
+                .ReturnsAsync(Result.Success());
 
             // Act
             await _controller.Create(model);

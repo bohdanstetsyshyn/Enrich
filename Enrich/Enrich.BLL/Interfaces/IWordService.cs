@@ -1,3 +1,4 @@
+using Enrich.BLL.Common;
 using Enrich.BLL.DTOs;
 using Enrich.DAL.Entities;
 
@@ -5,9 +6,9 @@ namespace Enrich.BLL.Interfaces
 {
     public interface IWordService
     {
-        Task<(bool Success, string? ErrorMessage)> CreatePersonalWordAsync(string userId, CreatePersonalWordDTO dto);
+        Task<Result> CreatePersonalWordAsync(string userId, CreatePersonalWordDTO dto);
 
-        Task<(bool Success, string? ErrorMessage)> DeleteWordAsync(string userId, int wordId);
+        Task<Result> DeleteWordAsync(string userId, int wordId);
 
         Task<IEnumerable<PersonalWordDTO>> GetPersonalWordsAsync(string userId);
 
@@ -15,7 +16,7 @@ namespace Enrich.BLL.Interfaces
 
         Task<PagedResult<SystemWordDTO>> GetSystemWordsAsync(string userId, string? searchTerm, string? category, string? partOfSpeech, string? difficultyLevel, int page, int pageSize);
 
-        Task<(bool Success, string? ErrorMessage)> SaveSystemWordAsync(string userId, int wordId);
+        Task<Result> SaveSystemWordAsync(string userId, int wordId);
 
         Task<IEnumerable<Category>> GetAllCategoriesAsync();
 

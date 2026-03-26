@@ -1,8 +1,8 @@
+using Enrich.BLL.Common;
 using Enrich.BLL.DTOs;
 using Enrich.BLL.Interfaces;
 using Enrich.Web.Controllers;
 using Enrich.Web.ViewModels;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -79,8 +79,8 @@ namespace Enrich.UnitTests.Controllers
         public async Task Signup_Post_WhenRegistrationSucceeds_RedirectsToSettings()
         {
             var model = new SignupViewModel { Email = "test@test.com", Username = "Bohdan", Password = "StrongPassword123!" };
-            _authServiceMock.Setup(a => a.RegisterUserAsync(It.IsAny<UserSignupDTO>())).ReturnsAsync(IdentityResult.Success);
-            _authServiceMock.Setup(a => a.LoginAsync(It.IsAny<LoginDTO>())).ReturnsAsync(Microsoft.AspNetCore.Identity.SignInResult.Success);
+            _authServiceMock.Setup(a => a.RegisterUserAsync(It.IsAny<UserSignupDTO>())).ReturnsAsync(Result.Success());
+            _authServiceMock.Setup(a => a.LoginAsync(It.IsAny<LoginDTO>())).ReturnsAsync(Result.Success());
 
             var result = await _controller.Signup(model);
 
@@ -99,7 +99,7 @@ namespace Enrich.UnitTests.Controllers
         public async Task Login_Post_WhenAuthSucceeds_RedirectsToSettings()
         {
             var model = new LoginViewModel { Email = "test@test.com", Password = "Password123!" };
-            _authServiceMock.Setup(a => a.LoginAsync(It.IsAny<LoginDTO>())).ReturnsAsync(Microsoft.AspNetCore.Identity.SignInResult.Success);
+            _authServiceMock.Setup(a => a.LoginAsync(It.IsAny<LoginDTO>())).ReturnsAsync(Result.Success());
 
             var result = await _controller.Login(model);
 

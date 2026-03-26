@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Enrich.BLL.Common;
 using Enrich.BLL.DTOs;
 using Enrich.BLL.Interfaces;
 using Enrich.DAL.Entities;
@@ -12,13 +13,13 @@ namespace Enrich.BLL.Services
         UserManager<User> userManager,
         ILogger<UserService> logger) : IUserService
     {
-        public async Task<IdentityResult> UpdateProfileAsync(string userId, UpdateProfileDTO profileDto)
+        public async Task<Result> UpdateProfileAsync(string userId, UpdateProfileDTO profileDto)
         {
             var user = await userManager.FindByIdAsync(userId);
             if (user == null)
             {
                 logger.LogWarning("Спроба оновити неіснуючого користувача з ID: {UserId}", userId);
-                return IdentityResult.Failed(new IdentityError { Description = "Користувача не знайдено." });
+                return Result.Failure("Користувача не знайдено.");
             }
 
             user.Bio = profileDto.Bio;
@@ -35,7 +36,7 @@ namespace Enrich.BLL.Services
                         userId,
                         string.Join(", ", setUsernameResult.Errors.Select(e => e.Description)));
 
-                    return setUsernameResult;
+                    return Result.Failure(string.Join(", ", setUsernameResult.Errors.Select(e => e.Description)));
                 }
 
                 await userManager.UpdateNormalizedUserNameAsync(user);
@@ -46,16 +47,15 @@ namespace Enrich.BLL.Services
             if (updateResult.Succeeded)
             {
                 logger.LogInformation("Профіль користувача {UserId} успішно оновлено.", userId);
-            }
-            else
-            {
-                logger.LogError(
-                    "Помилка при фінальному збереженні користувача {UserId}: {Errors}",
-                    userId,
-                    string.Join(", ", updateResult.Errors.Select(e => e.Description)));
+                return Result.Success();
             }
 
-            return updateResult;
+            logger.LogError(
+                "Помилка при фінальному збереженні користувача {UserId}: {Errors}",
+                userId,
+                string.Join(", ", updateResult.Errors.Select(e => e.Description)));
+
+            return Result.Failure(string.Join(", ", updateResult.Errors.Select(e => e.Description)));
         }
 
         public async Task<IEnumerable<UserDTO>> GetAllUsersAsync()
@@ -71,13 +71,13 @@ namespace Enrich.BLL.Services
             })];
         }
 
-        public async Task<IdentityResult> RestrictUserAsync(RestrictAccountDTO dto)
+        public async Task<Result> RestrictUserAsync(RestrictAccountDTO dto)
         {
             var user = await userManager.FindByIdAsync(dto.UserId);
             if (user == null)
             {
                 logger.LogWarning("Спроба заблокувати неіснуючого користувача з ID: {UserId}", dto.UserId);
-                return IdentityResult.Failed(new IdentityError { Description = "Користувача не знайдено." });
+                return Result.Failure("Користувача не знайдено.");
             }
 
             var lockoutEndDate = DateTimeOffset.UtcNow.AddDays(dto.LockoutDays);
@@ -92,25 +92,25 @@ namespace Enrich.BLL.Services
                     dto.UserId,
                     lockoutEndDate,
                     dto.Reason);
-            }
-            else
-            {
-                logger.LogError(
-                    "Помилка при блокуванні користувача {UserId}: {Errors}",
-                    dto.UserId,
-                    string.Join(", ", result.Errors.Select(e => e.Description)));
+
+                return Result.Success();
             }
 
-            return result;
+            logger.LogError(
+                "Помилка при блокуванні користувача {UserId}: {Errors}",
+                dto.UserId,
+                string.Join(", ", result.Errors.Select(e => e.Description)));
+
+            return Result.Failure(string.Join(", ", result.Errors.Select(e => e.Description)));
         }
 
-        public async Task<IdentityResult> RestoreUserAsync(RestoreAccountDTO dto)
+        public async Task<Result> RestoreUserAsync(RestoreAccountDTO dto)
         {
             var user = await userManager.FindByIdAsync(dto.UserId);
             if (user == null)
             {
                 logger.LogWarning("Спроба розблокувати неіснуючого користувача з ID: {UserId}", dto.UserId);
-                return IdentityResult.Failed(new IdentityError { Description = "Користувача не знайдено." });
+                return Result.Failure("Користувача не знайдено.");
             }
 
             var result = await userManager.SetLockoutEndDateAsync(user, null);
@@ -120,16 +120,15 @@ namespace Enrich.BLL.Services
                 await userManager.UpdateSecurityStampAsync(user);
 
                 logger.LogInformation("Акаунт користувача {UserId} успішно розблоковано.", dto.UserId);
-            }
-            else
-            {
-                logger.LogError(
-                    "Помилка при розблокуванні користувача {UserId}: {Errors}",
-                    dto.UserId,
-                    string.Join(", ", result.Errors.Select(e => e.Description)));
+                return Result.Success();
             }
 
-            return result;
+            logger.LogError(
+                "Помилка при розблокуванні користувача {UserId}: {Errors}",
+                dto.UserId,
+                string.Join(", ", result.Errors.Select(e => e.Description)));
+
+            return Result.Failure(string.Join(", ", result.Errors.Select(e => e.Description)));
         }
 
         public async Task<UserDTO?> GetCurrentUserProfileAsync(ClaimsPrincipal userPrincipal)

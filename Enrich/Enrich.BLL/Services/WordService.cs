@@ -1,3 +1,4 @@
+using Enrich.BLL.Common;
 using Enrich.BLL.DTOs;
 using Enrich.BLL.Interfaces;
 using Enrich.DAL.Entities;
@@ -11,7 +12,7 @@ namespace Enrich.BLL.Services
         ICategoryRepository categoryRepository,
         ILogger<WordService> logger) : IWordService
     {
-        public async Task<(bool Success, string? ErrorMessage)> CreatePersonalWordAsync(string userId, CreatePersonalWordDTO dto)
+        public async Task<Result> CreatePersonalWordAsync(string userId, CreatePersonalWordDTO dto)
         {
             var termLower = dto.Term.Trim().ToLowerInvariant();
 
@@ -24,7 +25,7 @@ namespace Enrich.BLL.Services
                     userId,
                     dto.Term);
 
-                return (false, $"У вашому особистому словнику вже є слово '{dto.Term}'.");
+                return Result.Failure($"У вашому особистому словнику вже є слово '{dto.Term}'.");
             }
 
             var now = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Unspecified);
@@ -70,7 +71,7 @@ namespace Enrich.BLL.Services
                 createdWord.Id,
                 categories.Count);
 
-            return (true, null);
+            return Result.Success();
         }
 
         public async Task<IEnumerable<PersonalWordDTO>> GetPersonalWordsAsync(string userId)
@@ -98,33 +99,33 @@ namespace Enrich.BLL.Services
             return words;
         }
 
-        public async Task<(bool Success, string? ErrorMessage)> DeleteWordAsync(string userId, int wordId)
+        public async Task<Result> DeleteWordAsync(string userId, int wordId)
         {
             var userWord = await wordRepository.GetUserWordAsync(userId, wordId);
 
             if (userWord == null)
             {
                 logger.LogWarning("Спроба видалити слово {WordId} користувачем {UserId}, але воно не знайдено.", wordId, userId);
-                return (false, "Word not found in your saved words.");
+                return Result.Failure("Word not found in your saved words.");
             }
 
             var word = userWord.Word;
             if (word == null)
             {
                 await wordRepository.DeleteUserWordAsync(userWord);
-                return (true, null);
+                return Result.Success();
             }
 
             if (!word.IsGlobal && word.CreatorId == userId)
             {
                 await wordRepository.DeleteWordAsync(word);
                 logger.LogInformation("Користувач {UserId} як творець видалив персональне слово {WordId}.", userId, wordId);
-                return (true, null);
+                return Result.Success();
             }
 
             await wordRepository.DeleteUserWordAsync(userWord);
             logger.LogInformation("Користувач {UserId} видалив слово {WordId} зі збережених.", userId, wordId);
-            return (true, null);
+            return Result.Success();
         }
 
         public async Task<PagedResult<PersonalWordDTO>> GetPersonalWordsAsync(string userId, string? searchTerm, string? category, string? partOfSpeech, string? difficultyLevel, int page, int pageSize)
@@ -205,19 +206,19 @@ namespace Enrich.BLL.Services
             };
         }
 
-        public async Task<(bool Success, string? ErrorMessage)> SaveSystemWordAsync(string userId, int wordId)
+        public async Task<Result> SaveSystemWordAsync(string userId, int wordId)
         {
             var word = await wordRepository.GetWordAsync(wordId);
 
             if (word == null || !word.IsGlobal)
             {
-                return (false, "Word not found or is not a system word.");
+                return Result.Failure("Word not found or is not a system word.");
             }
 
             var alreadySaved = await wordRepository.UserHasWordAsync(userId, wordId);
             if (alreadySaved)
             {
-                return (false, "You have already saved this word.");
+                return Result.Failure("You have already saved this word.");
             }
 
             var userWord = new UserWord
@@ -231,7 +232,7 @@ namespace Enrich.BLL.Services
 
             logger.LogInformation("User {UserId} saved global word {WordId}.", userId, wordId);
 
-            return (true, null);
+            return Result.Success();
         }
 
         public async Task<IEnumerable<Category>> GetAllCategoriesAsync()

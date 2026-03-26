@@ -1,13 +1,13 @@
-﻿using Enrich.BLL.DTOs;
-using Microsoft.AspNetCore.Identity;
+using Enrich.BLL.Common;
+using Enrich.BLL.DTOs;
 
 namespace Enrich.BLL.Interfaces
 {
     public interface IAuthService
     {
-        Task<IdentityResult> RegisterUserAsync(UserSignupDTO dto);
+        Task<Result> RegisterUserAsync(UserSignupDTO dto);
 
-        Task<SignInResult> LoginAsync(LoginDTO dto);
+        Task<Result> LoginAsync(LoginDTO dto);
 
         Task LogoutAsync();
     }

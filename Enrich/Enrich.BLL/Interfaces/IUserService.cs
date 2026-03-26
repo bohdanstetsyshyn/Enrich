@@ -1,5 +1,5 @@
+using Enrich.BLL.Common;
 using Enrich.BLL.DTOs;
-using Microsoft.AspNetCore.Identity;
 
 namespace Enrich.BLL.Interfaces
 {
@@ -7,11 +7,11 @@ namespace Enrich.BLL.Interfaces
     {
         Task<IEnumerable<UserDTO>> GetAllUsersAsync();
 
-        Task<IdentityResult> UpdateProfileAsync(string userId, UpdateProfileDTO profileDto);
+        Task<Result> UpdateProfileAsync(string userId, UpdateProfileDTO profileDto);
 
-        Task<IdentityResult> RestrictUserAsync(RestrictAccountDTO dto);
+        Task<Result> RestrictUserAsync(RestrictAccountDTO dto);
 
-        Task<IdentityResult> RestoreUserAsync(RestoreAccountDTO dto);
+        Task<Result> RestoreUserAsync(RestoreAccountDTO dto);
 
         Task<UserDTO?> GetCurrentUserProfileAsync(System.Security.Claims.ClaimsPrincipal userPrincipal);
 

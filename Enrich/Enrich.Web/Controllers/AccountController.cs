@@ -44,7 +44,7 @@ namespace Enrich.Web.Controllers
 
             var result = await authService.RegisterUserAsync(userDto);
 
-            if (result.Succeeded)
+            if (result.IsSuccess)
             {
                 logger.LogInformation(
                     "Успішно зареєстровано нового користувача Username: {Username}, Email: {Email}",
@@ -62,18 +62,13 @@ namespace Enrich.Web.Controllers
                 return RedirectToAction("Settings", "Account");
             }
 
-            var errorCodes = result.Errors.Select(e => e.Code).ToArray();
-
             logger.LogWarning(
-                "Помилка Identity при реєстрації Username: {Username}, Email: {Email}. Коди помилок: {@ErrorCodes}",
+                "Помилка Identity при реєстрації Username: {Username}, Email: {Email}. Помилка: {ErrorMessage}",
                 model.Username,
                 model.Email,
-                errorCodes);
+                result.ErrorMessage);
 
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
+            ModelState.AddModelError(string.Empty, result.ErrorMessage!);
 
             return View(model);
         }
@@ -110,21 +105,14 @@ namespace Enrich.Web.Controllers
 
             var result = await authService.LoginAsync(loginDto);
 
-            if (result.Succeeded)
+            if (result.IsSuccess)
             {
                 logger.LogInformation("Користувач з Email: {Email} успішно увійшов.", model.Email);
                 return RedirectToAction("Settings", "Account");
             }
 
-            if (result.IsLockedOut)
-            {
-                logger.LogWarning("Спроба входу в заблокований акаунт: {Email}.", model.Email);
-                ModelState.AddModelError(string.Empty, "Ваш акаунт заблоковано. Зверніться до адміністратора.");
-                return View(model);
-            }
-
-            logger.LogWarning("Невдала спроба входу для Email: {Email}.", model.Email);
-            ModelState.AddModelError(string.Empty, "Невірний email або пароль.");
+            logger.LogWarning("Невдала спроба входу для Email: {Email}. Причина: {ErrorMessage}", model.Email, result.ErrorMessage);
+            ModelState.AddModelError(string.Empty, result.ErrorMessage!);
             return View(model);
         }
 
@@ -183,17 +171,14 @@ namespace Enrich.Web.Controllers
             var updateDto = new UpdateProfileDTO { Username = model.Username, Bio = model.Bio };
             var result = await userService.UpdateProfileAsync(profileDto.Id, updateDto);
 
-            if (result.Succeeded)
+            if (result.IsSuccess)
             {
                 logger.LogInformation("Користувач {UserId} успішно оновив профіль.", profileDto.Id);
                 TempData["SuccessMessage"] = "Your profile has been successfully updated.";
                 return RedirectToAction("Settings", new { tab });
             }
 
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
+            ModelState.AddModelError(string.Empty, result.ErrorMessage!);
 
             ViewBag.ActiveTab = tab;
             return View(model);
