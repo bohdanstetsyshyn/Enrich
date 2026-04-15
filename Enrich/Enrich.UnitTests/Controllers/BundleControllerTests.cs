@@ -579,5 +579,73 @@ namespace Enrich.UnitTests.Controllers
             Assert.That(okResult, Is.Not.Null);
             _bundleServiceMock.Verify(s => s.SubmitBundleForReviewAsync(TestUserId, bundleId), Times.Once);
         }
+        [Test]
+            public async Task Details_ValidIdAndIsOwner_ReturnsViewWithBundle()
+            {
+                // Arrange
+                var bundleId = 1;
+                var bundleDto = new BundleDTO
+                {
+                    Id = bundleId,
+                    Title = "Test Bundle",
+                    OwnerId = TestUserId,
+                    IsSystem = false,
+                    IsPublic = false,
+                    Words = new List<WordItemViewModel> { new WordItemViewModel { Id = 1, Term = "Word" } }
+                };
+
+                _bundleServiceMock
+                    .Setup(s => s.GetBundleByIdAsync(bundleId))
+                    .ReturnsAsync(bundleDto);
+
+                // Act
+                var result = await _controller.Details(bundleId);
+
+                // Assert
+                var viewResult = result as ViewResult;
+                Assert.That(viewResult, Is.Not.Null);
+                Assert.That(viewResult!.Model, Is.EqualTo(bundleDto));
+                _bundleServiceMock.Verify(s => s.GetBundleByIdAsync(bundleId), Times.Once);
+            }
+
+            [Test]
+            public async Task Details_NonExistentId_ReturnsNotFound()
+            {
+                // Arrange
+                var bundleId = 999;
+                _bundleServiceMock
+                    .Setup(s => s.GetBundleByIdAsync(bundleId))
+                    .ReturnsAsync((BundleDTO?)null);
+
+                // Act
+                var result = await _controller.Details(bundleId);
+
+                // Assert
+                Assert.That(result, Is.InstanceOf<NotFoundResult>());
+            }
+
+            [Test]
+            public async Task Details_PrivateBundleBelongsToOtherUser_ReturnsForbid()
+            {
+                // Arrange
+                var bundleId = 1;
+                var bundleDto = new BundleDTO
+                {
+                    Id = bundleId,
+                    OwnerId = "other-user",
+                    IsSystem = false,
+                    IsPublic = false
+                };
+
+                _bundleServiceMock
+                    .Setup(s => s.GetBundleByIdAsync(bundleId))
+                    .ReturnsAsync(bundleDto);
+
+                // Act
+                var result = await _controller.Details(bundleId);
+
+                // Assert
+                Assert.That(result, Is.InstanceOf<ForbidResult>());
+            }
     }
 }

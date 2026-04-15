@@ -50,5 +50,7 @@ namespace Enrich.DAL.Interfaces
         Task<bool> UserHasBundleAsync(string userId, int bundleId);
 
         Task SaveUserBundleAsync(UserBundle userBundle);
+        
+        Task<Bundle?> GetBundleWithWordsAsync(int bundleId);
     }
 }

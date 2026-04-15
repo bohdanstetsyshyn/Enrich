@@ -74,6 +74,28 @@ namespace Enrich.Web.Controllers
             return View(viewModel);
         }
 
+    [HttpGet]
+    public async Task<IActionResult> Details(int id)
+    {
+        var bundle = await bundleService.GetBundleByIdAsync(id);
+
+        if (bundle == null)
+        {
+            logger.LogWarning("Користувач {UserId} намагався переглянути неіснуючу колекцію {BundleId}.", CurrentUserId, id);
+            return NotFound();
+        }
+
+        if (!bundle.IsSystem && bundle.OwnerId != CurrentUserId && !bundle.IsPublic)
+        {
+            logger.LogWarning("Доступ заборонено: Користувач {UserId} намагався переглянути приватну колекцію {BundleId}.", CurrentUserId, id);
+            return Forbid();
+        }
+
+        logger.LogInformation("Користувач {UserId} переглядає вміст колекції {BundleId} (\"{Title}\").", CurrentUserId, id, bundle.Title);
+        
+        return View(bundle);
+    }
+
         [HttpGet]
         public async Task<IActionResult> Create()
         {

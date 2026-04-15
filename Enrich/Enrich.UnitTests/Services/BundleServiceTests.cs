@@ -36,6 +36,31 @@ namespace Enrich.UnitTests.Services
         }
 
         [Test]
+        public async Task GetBundleByIdAsync_ValidId_ReturnsBundleWithWords()
+        {
+            // Arrange
+            var bundleId = 1;
+            var bundle = new Bundle
+            {
+                Id = bundleId,
+                Title = "Test Bundle",
+                Words = new List<Word> { new Word { Id = 1, Term = "Apple", Translation = "Яблуко" } }
+            };
+
+            _bundleRepositoryMock
+                .Setup(r => r.GetBundleByIdWithDetailsAsync(bundleId))
+                .ReturnsAsync(bundle);
+
+            // Act
+            var result = await _bundleService.GetBundleByIdAsync(bundleId);
+
+            // Assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result!.Words.Count, Is.EqualTo(1));
+            Assert.That(result.Words[0].Term, Is.EqualTo("Apple"));
+        }
+
+        [Test]
         public async Task GetSystemBundlesAsync_ReturnsPagedResult()
         {
             // Arrange

@@ -28,16 +28,18 @@
                     <div class="d-flex flex-row">
 
                         <div class="me-3 position-relative">
-                            <div class="bundle-image-horizontal">
-                                @if (!string.IsNullOrEmpty(bundle.ImageUrl))
-                                {
-                                    <img src="@bundle.ImageUrl" alt="@bundle.Title" />
-                                }
-                                else
-                                {
-                                    <i class="bi bi-camera"></i>
-                                }
-                            </div>
+                            <a asp-action="Details" asp-route-id="@bundle.Id" class="text-decoration-none">
+                                <div class="bundle-image-horizontal">
+                                    @if (!string.IsNullOrEmpty(bundle.ImageUrl))
+                                    {
+                                        <img src="@bundle.ImageUrl" alt="@bundle.Title" />
+                                    }
+                                    else
+                                    {
+                                        <i class="bi bi-camera"></i>
+                                    }
+                                </div>
+                            </a>
 
                             @if (!bundle.IsSystem)
                             {
@@ -56,7 +58,11 @@
 
                         <div class="bundle-content flex-grow-1">
                             <div class="d-flex justify-content-between align-items-start">
-                                <h5 class="bundle-title text-truncate" style="max-width: 250px;">@bundle.Title</h5>
+                                <h5 class="bundle-title text-truncate" style="max-width: 250px;">
+                                    <a asp-action="Details" asp-route-id="@bundle.Id" class="text-decoration-none text-dark hover-green">
+                                        @bundle.Title
+                                    </a>
+                                </h5>
 
                                 <div class="dropdown">
                                     <button class="btn btn-link text-muted p-0" type="button" data-bs-toggle="dropdown">
@@ -95,7 +101,7 @@
                                 </div>
                             </div>
 
-                            <div class="bundle-wordcount">Words: @bundle.WordCount</div>
+                            <div class="bundle-wordcount text-muted small">Words: @bundle.WordCount</div>
 
                             <p class="bundle-description">
                                 @bundle.Description

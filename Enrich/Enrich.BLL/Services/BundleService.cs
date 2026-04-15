@@ -494,7 +494,13 @@ namespace Enrich.BLL.Services
                 TagCount = bundle.Tags?.Count ?? 0,
                 Categories = bundle.Categories?.Select(c => c.Name).ToList() ?? [],
                 CategoryIds = bundle.Categories?.Select(c => c.Id).ToList() ?? [],
-                WordIds = bundle.Words?.Select(w => w.Id).ToList() ?? []
+                WordIds = bundle.Words?.Select(w => w.Id).ToList() ?? [],
+                Words = bundle.Words?.Select(w => new WordItemViewModel 
+                { 
+                    Id = w.Id, 
+                    Term = w.Term, 
+                    Translation = w.Translation 
+                }).ToList() ?? []
             };
         }
 

@@ -339,5 +339,11 @@ namespace Enrich.DAL.Repositories
             await dbContext.UserBundles.AddAsync(userBundle);
             await dbContext.SaveChangesAsync();
         }
+        public async Task<Bundle?> GetBundleWithWordsAsync(int bundleId)
+        {
+            return await dbContext.Bundles
+                .Include(b => b.Words)
+                .FirstOrDefaultAsync(b => b.Id == bundleId);
+        }
     }
 }
