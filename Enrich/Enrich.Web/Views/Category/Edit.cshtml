@@ -1,0 +1,44 @@
+@model Enrich.Web.ViewModels.CategoryViewModel
+
+@{
+    ViewData["Title"] = "Edit Category";
+    Layout = "~/Views/Shared/_AppLayout.cshtml";
+}
+
+<div class="d-flex align-items-center mb-4 gap-3">
+    <a asp-action="Index" class="btn-sm btn-outline-secondary rounded-3 d-flex align-items-center gap-1 text-decoration-none">
+        <i class="bi bi-arrow-left"></i> Back
+    </a>
+    <h1 class="fw-semibold fs-4 mb-0">Edit Category</h1>
+</div>
+
+<div class="card border-0 shadow-sm rounded-4 mx-auto" style="max-width: 600px;">
+    <div class="card-body p-4">
+        <form asp-action="Edit" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+
+            <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+
+            <div class="mb-4">
+                <label asp-for="Name" class="form-label fw-medium mb-1">Category Name</label>
+                <input asp-for="Name" class="form-control border-1 shadow-sm rounded-4 py-2 custom-gray-bg" 
+                       placeholder="Enter new category name" />
+                <span asp-validation-for="Name" class="text-danger small"></span>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-success rounded-4 px-5 fw-medium shadow-sm">
+                    <i class="bi bi-check-circle me-2"></i> Save Changes
+                </button>
+                <a asp-action="Index" class="btn btn-outline-secondary rounded-4 px-4 shadow-sm">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

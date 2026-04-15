@@ -1,0 +1,50 @@
+@model IEnumerable<Enrich.BLL.DTOs.CategoryDTO>
+@{
+    ViewData["Title"] = "Manage Categories";
+    Layout = "~/Views/Shared/_AppLayout.cshtml";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="fw-semibold fs-4 mb-0">Manage Categories</h1>
+    <a asp-action="Create" class="btn btn-success rounded-4 px-4 shadow-sm">
+        <i class="bi bi-plus-circle me-2"></i> Add Category
+    </a>
+</div>
+
+<div class="card border-0 shadow-sm rounded-4">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="ps-4 py-3 border-0" style="width: 100px;">ID</th>
+                        <th class="py-3 border-0">Category Name</th>
+                        <th class="pe-4 py-3 border-0 text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="ps-4 py-3 text-muted">#@item.Id</td>
+                            <td class="py-3 fw-medium">@item.Name</td>
+                            <td class="pe-4 py-3 text-end">
+                                <div class="d-flex justify-content-end gap-2">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary rounded-3">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <form asp-action="Delete" asp-route-id="@item.Id" method="post" onsubmit="return confirm('Delete this category?')">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-sm btn-outline-danger rounded-3">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

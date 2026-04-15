@@ -47,5 +47,25 @@ namespace Enrich.DAL.Repositories
                 .OrderBy(c => c.Name)
                 .ToListAsync();
         }
+        public async Task<Category?> GetCategoryByIdAsync(int id)
+        {
+            return await dbContext.Categories.FindAsync(id);
+        }
+
+        public async Task UpdateCategoryAsync(Category category)
+        {
+            dbContext.Categories.Update(category);
+            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task DeleteCategoryAsync(int id)
+        {
+            var category = await dbContext.Categories.FindAsync(id);
+            if (category != null)
+            {
+                dbContext.Categories.Remove(category);
+                await dbContext.SaveChangesAsync();
+            }
+        }
     }
 }

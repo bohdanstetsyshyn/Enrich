@@ -30,7 +30,6 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
     <style>
-
         .sidebar-container i.bi {
             -webkit-text-stroke: 0.4px;
         }
@@ -99,31 +98,41 @@
                     </li>
                 </ul>
 
-                <div class="text-secondary mb-2 px-3 mt-4" style="font-size: 0.85rem; font-weight: 600;">Administration</div>
-                <ul class="nav flex-column nav-pills gap-1 mb-1">
-                    <li class="nav-item">
-                        <a asp-controller="Admin" asp-action="Browse"
-                           class="nav-link d-flex align-items-center rounded-4 py-2 px-3 ms-2 me-3 @(currentController == "Admin" ? activeClass : inactiveClass)"
-                           style="font-weight: 500; font-size: 0.95rem;">
-                            <i class="bi bi-person-gear me-3 fs-6"></i>Manage users
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link d-flex align-items-center rounded-4 py-2 px-3 ms-2 me-3 text-dark" style="font-weight: 500; font-size: 0.95rem;">
-                            <i class="bi bi-book-fill me-3 fs-6"></i>Manage words
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link d-flex align-items-center rounded-4 py-2 px-3 ms-2 me-3 text-dark" style="font-weight: 500; font-size: 0.95rem;">
-                            <i class="bi bi-folder-fill me-3 fs-6"></i>Manage collections
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link d-flex align-items-center rounded-4 py-2 px-3 ms-2 me-3 text-dark" style="font-weight: 500; font-size: 0.95rem;">
-                            <i class="bi bi-hourglass-split me-3 fs-6"></i>Pending collections
-                        </a>
-                    </li>
-                </ul>
+                @if (roles.Contains("Admin"))
+                {
+                    <div class="text-secondary mb-2 px-3 mt-4" style="font-size: 0.85rem; font-weight: 600;">Administration</div>
+                    <ul class="nav flex-column nav-pills gap-1 mb-1">
+                        <li class="nav-item">
+                            <a asp-controller="Admin" asp-action="Browse"
+                               class="nav-link d-flex align-items-center rounded-4 py-2 px-3 ms-2 me-3 @(currentController == "Admin" ? activeClass : inactiveClass)"
+                               style="font-weight: 500; font-size: 0.95rem;">
+                                <i class="bi bi-person-gear me-3 fs-6"></i>Manage users
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Category" asp-action="Index"
+                               class="nav-link d-flex align-items-center rounded-4 py-2 px-3 ms-2 me-3 @(currentController == "Category" ? activeClass : inactiveClass)"
+                               style="font-weight: 500; font-size: 0.95rem;">
+                                <i class="bi bi-tags-fill me-3 fs-6"></i>Manage categories
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link d-flex align-items-center rounded-4 py-2 px-3 ms-2 me-3 text-dark" style="font-weight: 500; font-size: 0.95rem;">
+                                <i class="bi bi-book-fill me-3 fs-6"></i>Manage words
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link d-flex align-items-center rounded-4 py-2 px-3 ms-2 me-3 text-dark" style="font-weight: 500; font-size: 0.95rem;">
+                                <i class="bi bi-folder-fill me-3 fs-6"></i>Manage collections
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link d-flex align-items-center rounded-4 py-2 px-3 ms-2 me-3 text-dark" style="font-weight: 500; font-size: 0.95rem;">
+                                <i class="bi bi-hourglass-split me-3 fs-6"></i>Pending collections
+                            </a>
+                        </li>
+                    </ul>
+                }
 
             </div>
 
@@ -137,8 +146,8 @@
 
                     <div class="lh-1 overflow-hidden">
                         <a asp-controller="Account" asp-action="Settings" asp-route-tab="profile"
-                               class="text-decoration-none text-dark d-block text-truncate @(currentAction == "Settings" ? "text-success" : "")"
-                               style="font-weight: 600; font-size: 0.95rem; margin-bottom: 2px;">
+                           class="text-decoration-none text-dark d-block text-truncate @(currentAction == "Settings" ? "text-success" : "")"
+                           style="font-weight: 600; font-size: 0.95rem; margin-bottom: 2px;">
                             @(currentUser?.UserName ?? "Guest")
                         </a>
                         <div class="text-muted mt-1 text-truncate" style="font-size: 0.8rem;">@displayRole</div>
@@ -163,8 +172,7 @@
     <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1100">
         <div id="appToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="d-flex">
-                <div class="toast-body" id="appToastMessage">
-                </div>
+                <div class="toast-body" id="appToastMessage"></div>
                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
         </div>
@@ -184,7 +192,6 @@
             else if (type === 'danger') toastEl.classList.add('bg-danger');
             else if (type === 'warning') toastEl.classList.add('bg-warning');
             else if (type === 'info') toastEl.classList.add('bg-info');
-
             const toast = new bootstrap.Toast(toastEl);
             toast.show();
         }

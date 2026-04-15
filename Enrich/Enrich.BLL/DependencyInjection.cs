@@ -19,6 +19,7 @@ namespace Enrich.BLL
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IWordService, WordService>();
             services.AddScoped<IBundleService, BundleService>();
+            services.AddScoped<ICategoryService, CategoryService>();
 
             return services;
         }

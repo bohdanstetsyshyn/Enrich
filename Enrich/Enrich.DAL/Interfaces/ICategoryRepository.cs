@@ -11,5 +11,11 @@ namespace Enrich.DAL.Interfaces
         Task<Category> CreateCategoryAsync(Category category);
 
         Task<Category?> GetCategoryByNameAsync(string name);
+        
+        Task<Category?> GetCategoryByIdAsync(int id);
+
+        Task UpdateCategoryAsync(Category category);
+
+        Task DeleteCategoryAsync(int id);
     }
 }
