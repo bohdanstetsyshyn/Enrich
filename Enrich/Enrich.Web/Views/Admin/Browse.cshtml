@@ -4,12 +4,11 @@
     ViewData["Title"] = "Manage Users";
 }
 
-<div class="container-fluid pt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h4 class="fw-bold">Administration: Manage Users</h4>
-        <span class="badge bg-light text-dark border">Total: @(Model == null ? 0 : Model.Count())</span>
-    </div>
+@section Styles {
+    <link rel="stylesheet" href="~/css/administration.css" asp-append-version="true" />
+}
 
+<div class="container-fluid pt-4 administration-page admin-users-page">
     @if (TempData["SuccessMessage"] != null)
     {
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -18,11 +17,17 @@
         </div>
     }
 
-    <div class="card border-0 shadow-sm rounded-3">
+    <div class="card admin-card">
+        <div class="card-header admin-card-header">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <h4 class="fw-semibold mb-0">Administration: Manage Users</h4>
+                <span class="badge admin-total-badge">Total: @(Model == null ? 0 : Model.Count())</span>
+            </div>
+        </div>
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="bg-light">
+                <table class="table table-hover align-middle mb-0 admin-table">
+                    <thead>
                         <tr>
                             <th class="ps-4 py-3 text-muted fw-semibold">Username</th>
                             <th class="py-3 text-muted fw-semibold">Email</th>
@@ -36,7 +41,7 @@
                             <tr>
                                 <td class="ps-4">
                                     <div class="d-flex align-items-center">
-                                        <div class="bg-secondary rounded-circle me-2 d-flex justify-content-center align-items-center text-white fw-bold" style="width: 32px; height: 32px; font-size: 0.8rem; opacity: 0.7;">
+                                        <div class="admin-avatar">
                                             @((!string.IsNullOrEmpty(user?.Username) && user.Username.Length > 0) ? user.Username.Substring(0, 1).ToUpper() : "?")
                                         </div>
                                         <span class="fw-medium">@((user?.Username) ?? string.Empty)</span>
@@ -44,30 +49,33 @@
                                 </td>
                                 <td>@(user?.Email ?? string.Empty)</td>
                                 <td>
-                                    <span class="badge rounded-pill bg-info bg-opacity-10 text-info border border-info border-opacity-25 px-3">
-                                        @((user?.Role) ?? string.Empty)
-                                    </span>
-                                    @* Відображення статусу блокування *@
-                                    @if (user != null && user.IsLockedOut)
-                                    {
-                                        <span class="badge rounded-pill bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-3">Locked</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge rounded-pill bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3">Active</span>
-                                    }
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <span class="badge admin-pill admin-role-badge">
+                                            @((user?.Role) ?? string.Empty)
+                                        </span>
+                                        @if (user != null && user.IsLockedOut)
+                                        {
+                                            <span class="badge admin-pill admin-status-badge admin-status-locked">Locked</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge admin-pill admin-status-badge admin-status-active">Active</span>
+                                        }
+                                    </div>
                                 </td>
                                 <td class="text-end pe-4">
-                                    <button class="btn btn-sm btn-outline-light text-dark border shadow-sm">Edit</button>
-                                    
-                                    @if (user != null && user.IsLockedOut)
-                                    {
-                                        <a asp-action="Restore" asp-route-id="@user?.Id" asp-route-username="@user?.Username" class="btn btn-sm btn-outline-success text-dark border shadow-sm">Restore</a>
-                                    }
-                                    else
-                                    {
-                                        <a asp-action="Restrict" asp-route-id="@user?.Id" asp-route-username="@user?.Username" class="btn btn-sm btn-outline-warning text-dark border shadow-sm">Restrict</a>
-                                    }
+                                    <div class="d-inline-flex flex-wrap gap-2">
+                                        <button class="btn btn-sm admin-action-btn">Edit</button>
+
+                                        @if (user != null && user.IsLockedOut)
+                                        {
+                                            <a asp-action="Restore" asp-route-id="@user?.Id" asp-route-username="@user?.Username" class="btn btn-sm admin-action-btn">Restore</a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="Restrict" asp-route-id="@user?.Id" asp-route-username="@user?.Username" class="btn btn-sm btn-action-danger admin-action-btn">Restrict</a>
+                                        }
+                                    </div>
                                 </td>
                             </tr>
                         }
@@ -77,3 +85,7 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script src="~/js/administration.js" asp-append-version="true"></script>
+}

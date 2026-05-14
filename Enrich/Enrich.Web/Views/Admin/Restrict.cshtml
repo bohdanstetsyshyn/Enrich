@@ -1,34 +1,41 @@
 @model Enrich.Web.ViewModels.RestrictAccountViewModel
 
 @{
-    ViewData["Title"] = "Обмеження доступу";
+    ViewData["Title"] = "Restrict Account";
 }
 
-<div class="container mt-4">
-    <h2>Обмеження доступу для @Model.Username</h2>
-    <p class="text-muted">Ця дія заблокує користувачу можливість входити в систему.</p>
+@section Styles {
+    <link rel="stylesheet" href="~/css/administration.css" asp-append-version="true" />
+}
 
-    <div class="row">
-        <div class="col-md-6">
+<div class="container py-4 administration-page admin-restrict-page">
+    <div class="card admin-card admin-restrict-card">
+        <div class="card-body p-4">
+            <h4 class="fw-semibold mb-2">Restrict access</h4>
+            <p class="text-muted mb-4">You are about to restrict access for <strong>@Model.Username</strong>. Please provide a reason below.</p>
+
             <form asp-action="Restrict" method="post">
                 <input type="hidden" asp-for="UserId" />
                 <input type="hidden" asp-for="Username" />
 
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-                <div class="form-group mb-3">
-                    <label asp-for="Reason" class="form-label">Причина обмеження:</label>
-                    <textarea asp-for="Reason" class="form-control" rows="4"></textarea>
+                <div class="mb-3">
+                    <label asp-for="Reason" class="form-label">Restriction reason</label>
+                    <textarea asp-for="Reason" class="form-control admin-textarea" rows="4" placeholder="Add a short reason for this restriction."></textarea>
                     <span asp-validation-for="Reason" class="text-danger"></span>
                 </div>
 
-                <button type="submit" class="btn btn-danger">Заблокувати акаунт</button>
-                <a asp-action="Browse" class="btn btn-secondary">Скасувати</a>
+                <div class="d-flex flex-wrap gap-2">
+                    <button type="submit" class="btn btn-action-danger">Restrict Account</button>
+                    <a asp-action="Browse" class="btn btn-action-neutral-outline">Cancel</a>
+                </div>
             </form>
         </div>
     </div>
 </div>
 
 @section Scripts {
+    <script src="~/js/administration.js" asp-append-version="true"></script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

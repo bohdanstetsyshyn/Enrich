@@ -1,0 +1,176 @@
+.administration-page .card {
+  border-radius: 12px;
+  border: 1px solid #dee2e6;
+  box-shadow: none;
+}
+
+.administration-page .card-header {
+  background-color: #ffffff;
+  border-bottom: 1px solid #dee2e6;
+  padding: 1rem 1.25rem;
+}
+
+.administration-page .btn,
+.administration-page .form-control,
+.administration-page .badge {
+  border-radius: 12px;
+}
+
+.administration-page .btn {
+  box-shadow: none;
+}
+
+.administration-page .form-control {
+  border: 1px solid #dee2e6;
+  padding: 0.65rem 0.9rem;
+  box-shadow: none;
+}
+
+.administration-page .form-control:focus {
+  border-color: #86b7fe;
+  box-shadow: none;
+}
+
+.admin-total-badge {
+  border-radius: 999px;
+  padding: 0.35rem 0.85rem;
+  background-color: #f8f9fa;
+  color: #343a40;
+  border: 1px solid #dee2e6;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.admin-table thead {
+  background-color: #f8f9fa;
+}
+
+.admin-table thead th {
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.admin-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.admin-table td,
+.admin-table th {
+  border-color: #dee2e6;
+}
+
+.admin-avatar {
+  width: 32px;
+  height: 32px;
+  margin-right: 0.5rem;
+  border-radius: 50%;
+  background-color: #adb5bd;
+  opacity: 0.7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.admin-pill {
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+
+.admin-role-badge {
+  background-color: #e9f2ff;
+  color: #0b5ed7;
+  border-color: #cfe2ff;
+}
+
+.admin-status-active {
+  background-color: #e6f4ea;
+  color: #198754;
+  border-color: #cfe9d9;
+}
+
+.admin-status-locked {
+  background-color: #fdecea;
+  color: #dc3545;
+  border-color: #f5c2c7;
+}
+
+.administration-page .btn-action-success {
+  background-color: #198754;
+  border: 1px solid #198754;
+  color: #ffffff;
+  padding: 0.55rem 1.25rem;
+  font-weight: 600;
+}
+
+.administration-page .btn-action-success:hover {
+  background-color: #157347;
+  border-color: #157347;
+  color: #ffffff;
+}
+
+.administration-page .btn-action-danger {
+  background-color: #dc3545;
+  border: 1px solid #dc3545;
+  color: #ffffff;
+  padding: 0.55rem 1.25rem;
+  font-weight: 600;
+}
+
+.administration-page .btn-action-danger:hover {
+  background-color: #bb2d3b;
+  border-color: #bb2d3b;
+  color: #ffffff;
+}
+
+.btn-action-neutral-outline {
+  background-color: transparent;
+  border: 1px solid #dee2e6;
+  color: #343a40;
+  padding: 0.55rem 1.25rem;
+  font-weight: 600;
+}
+
+.btn-action-neutral-outline:hover {
+  background-color: #f8f9fa;
+  border-color: #ced4da;
+  color: #212529;
+}
+
+.admin-action-btn {
+  background-color: #ffffff;
+  border: 1px solid #dee2e6;
+  color: #343a40;
+  padding: 0.35rem 0.85rem;
+  font-weight: 500;
+  font-size: 0.8rem;
+}
+
+.admin-action-btn:hover {
+  background-color: #f8f9fa;
+  color: #212529;
+}
+
+.admin-action-btn.btn-action-danger {
+  background-color: transparent;
+  border-color: #dc3545;
+  color: #dc3545;
+  padding: 0.35rem 0.85rem;
+  font-weight: 500;
+}
+
+.admin-action-btn.btn-action-danger:hover {
+  background-color: #fdecea;
+  color: #b02a37;
+}
+
+.admin-restrict-card {
+  max-width: 600px;
+  margin: 0 auto;
+}
